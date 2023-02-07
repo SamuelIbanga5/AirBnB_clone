@@ -15,4 +15,14 @@ class FileStorage:
 
     def new(self, obj):
         """new method sets in __objects the obj with key <obj class name>.id"""
+        self.__objects[obj['id']] = obj
+
+    def save(self):
+        """save method serializes __objects to the JSON file(path: __file_path)"""
+        json_objects = json.dumps(self.__objects)
+        with open(self.__file_path, 'w', encoding='UTF-8') as f:
+            f.write(json_objects)
+
+
+
 
