@@ -8,7 +8,7 @@ from datetime import datetime
 class BaseModel():
     """BaseModel class defines all common attributes/methods for other classes of the HBnB project."""
 
-    def __init__(self, id=uuid4(), created_at=datetime.now(), updated_at=datetime.now()):
+    def __init__(self, *args, **kwargs):
         """__init__ class method initializes instance of the BaseModel class
 
         Args:
@@ -24,7 +24,7 @@ class BaseModel():
         """__str__ method that prints a string representation of BaseModel class
         [<class name>] (<self.id>) <self.__dict__>
         """
-        print("[{}] ({}) {}".format(__class__.__name__, self.id, self.__dict__))
+        return "[{}] ({}) {}".format(__class__.__name__, self.id, self.__dict__)
 
 
     def save(self):
