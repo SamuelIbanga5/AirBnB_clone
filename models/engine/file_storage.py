@@ -3,7 +3,7 @@
 
 
 import json
-from models.base_model import BaseModel
+from ...models.base_model import BaseModel
 
 class FileStorage:
     """FileStorage class that serializes instances to a JSON file and deserializes JSON file to instances."""
@@ -37,11 +37,3 @@ class FileStorage:
 
         except FileNotFoundError:
             pass
-
-
-
-bm = BaseModel()
-fs = FileStorage()
-
-fs.new(bm)
-fs.save()
