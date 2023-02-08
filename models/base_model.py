@@ -4,6 +4,7 @@
 
 from uuid import uuid4
 from datetime import datetime
+import models
 
 class BaseModel():
     """BaseModel class defines all common attributes/methods for other classes of the HBnB project."""
@@ -20,6 +21,7 @@ class BaseModel():
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+            models.storage.new()
         else:
             for key, value in kwargs.items():
                 if key != "__class__":
@@ -27,6 +29,7 @@ class BaseModel():
                         setattr(self, key, datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))
                     else:
                         setattr(self, key, value)
+            
 
     def __str__(self):
         """__str__ method that prints a string representation of BaseModel class
@@ -37,6 +40,7 @@ class BaseModel():
     def save(self):
         """save method updates the public instance attribute updated_at with the current datetime"""
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         """to_dict method returns a dictionary containing all keys/values of __dict__ of the instance"""

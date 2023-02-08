@@ -33,15 +33,10 @@ class FileStorage:
         try:
             with open(self.__file_path, 'r') as f:
                 # f.read()
-                deserialized_obj = json.load(f)
-
+                d_obj = json.load(f)
+                for obj in d_obj.values():
+                    self.new(eval(obj["__class__"])(**obj))
         except FileNotFoundError:
             pass
 
 
-
-bm = BaseModel()
-fs = FileStorage()
-
-fs.new(bm)
-fs.save()
