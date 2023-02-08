@@ -16,14 +16,15 @@ class BaseModel():
             created_at (datetime): Assign with the current datetime when an instance is created.
             updated_at (datetime): Assign with the current datetime when an instance is created and it will be updated everytime project is changed.
         """
-        if not kwargs:
+        if len(kwargs) == 0:
             self.id = str(uuid4())
-            self.created_at = self.updated_at = datetime.now()
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
         else:
             for key, value in kwargs.items():
                 if key != "__class__":
                     if key in ('created_at', 'updated_at'):
-                        setattr(self, key, datetime.fromisoformat(value))
+                        setattr(self, key, datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))
                     else:
                         setattr(self, key, value)
 
@@ -41,11 +42,8 @@ class BaseModel():
         """to_dict method returns a dictionary containing all keys/values of __dict__ of the instance"""
         base_model_dict = self.__dict__
         base_model_dict["__class__"] = __class__.__name__
-        base_model_dict["updated_at"] = str(self.updated_at.isoformat())
-        base_model_dict["created_at"] = str(self.created_at.isoformat())
-        base_model_dict["id"] = self.id
+        base_model_dict["updated_at"] = self.updated_at.isoformat()
+        base_model_dict["created_at"] = self.created_at.isoformat()
 
         return base_model_dict
 
-
-bm = BaseModel()
