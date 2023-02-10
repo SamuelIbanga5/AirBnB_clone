@@ -3,7 +3,11 @@
 
 
 import json
-from models.base_model import BaseModel
+import sys
+# sys.path.append(sys.path[0].replace("\models\engine", ""))
+# print(sys.path)
+# sys.path.append("...")
+from models.base_model import BaseModel 
 
 class FileStorage:
     """FileStorage class that serializes instances to a JSON file and deserializes JSON file to instances."""
@@ -24,20 +28,23 @@ class FileStorage:
         obj_dict = {}
         for key, value in self.__objects.items():
             obj_dict[key] = value.to_dict()
-        with open(self.__file_path, 'w', encoding='utf-8') as f:
+        with open(self.__file_path, 'w') as f:
             json.dump(obj_dict, f)
-
 
     def reload(self):
         """reload method deserializes the JSON file to __objects (only if the JSON file (__file_path) exists;"""
         try:
             with open(self.__file_path, 'r') as f:
-                json_str = f.read()
-                print(json_str)
-                # d_obj = json.loads(f.read())
-                # for obj in d_obj.values():
-                #     self.new(eval(obj["__class__"])(**obj))
+                obj = json.load(f)
+                for o in obj.values():
+                    cls_name = o["__class__"]
+                    del o["__class__"]
+                    self.new(eval(cls_name)(**o))
         except FileNotFoundError:
             pass
 
 
+bm = BaseModel()
+fs = FileStorage()
+fs.new(bm)
+fs.save()
