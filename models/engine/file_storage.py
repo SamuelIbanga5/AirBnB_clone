@@ -43,7 +43,6 @@ class FileStorage:
         except FileNotFoundError:
             pass
 
-
 bm = BaseModel()
 fs = FileStorage()
 fs.new(bm)
