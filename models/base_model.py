@@ -1,11 +1,7 @@
 #!/usr/bin/python3
 """Defines the BaseModel class"""
 
-import sys
-# sys.path.append(sys.path[0].replace("\models", ""))
-# print(sys.path)
-# print(sys.path)
-# from . import storage
+
 from uuid import uuid4
 from datetime import datetime
 
@@ -40,7 +36,7 @@ class BaseModel:
         """__str__ method that prints a string representation of BaseModel class
         [<class name>] (<self.id>) <self.__dict__>
         """
-        return "[{}] ({}) {}".format(__class__.__name__, self.id, self.__dict__)
+        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
 
     def save(self):
         """save method updates the public instance attribute updated_at with the current datetime"""

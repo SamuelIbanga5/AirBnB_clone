@@ -3,10 +3,8 @@
 
 
 import json
-import sys
-# sys.path.append(sys.path[0].replace("\models\engine", ""))
-# print(sys.path)
-# sys.path.append("...")
+from models.base_model import BaseModel
+from models.user import User
 
 class FileStorage:
     """FileStorage class that serializes instances to a JSON file and deserializes JSON file to instances."""
@@ -32,9 +30,11 @@ class FileStorage:
 
     def reload(self):
         """reload method deserializes the JSON file to __objects (only if the JSON file (__file_path) exists;"""
+        dct = {"BaseModel": BaseModel, "User": User}
+
         try:
             with open(self.__file_path, encoding='utf-8') as f:
-                for obj in json.load(f).values():
-                    self.new(eval(obj['__class__'])(**obj))
+                for key, value in json.load(f).items():
+                    self.new(dct[value["__class__"]](**value))
         except FileNotFoundError:
             return
