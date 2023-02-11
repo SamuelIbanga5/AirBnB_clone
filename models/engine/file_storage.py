@@ -4,7 +4,7 @@
 
 import json
 import sys
-# sys.path.append(sys.path[0].replace("\models\engine", ""))
+sys.path.append(sys.path[0].replace("\models\engine", ""))
 # print(sys.path)
 # sys.path.append("...")
 from models.base_model import BaseModel 
