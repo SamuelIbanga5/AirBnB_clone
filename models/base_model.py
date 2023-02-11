@@ -47,7 +47,7 @@ class BaseModel:
     def to_dict(self):
         """to_dict method returns a dictionary containing all keys/values of __dict__ of the instance"""
         base_model_dict = self.__dict__.copy()
-        base_model_dict["__class__"] = __class__.__name__
+        base_model_dict["__class__"] = self.__class__.__name__
         for key, value in self.__dict__.items():
             if key in ("created_at", "updated_at"):
                 value = self.__dict__[key].isoformat()

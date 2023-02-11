@@ -5,6 +5,11 @@
 import cmd
 from models.base_model import BaseModel
 from models.user import User
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
 from models.engine.file_storage import FileStorage
 from models import storage
 
@@ -15,11 +20,11 @@ class HBNBCommand(cmd.Cmd):
     classes = {
         "BaseModel": BaseModel,
         "User": User,
-        # "State": State,
-        # "City": City,
-        # "Place": Place,
-        # "Amenity": "Amenity",
-        # "Review": "Review"
+        "State": State,
+        "City": City,
+        "Place": Place,
+        "Amenity": Amenity,
+        "Review": Review
     }
 
     def do_create(self, args):
@@ -29,7 +34,7 @@ class HBNBCommand(cmd.Cmd):
                 model_instance = HBNBCommand.classes[args]()
                 storage.save()
                 print(model_instance.id)
-            elif args not in ('BaseModel', 'FileStorage'):
+            elif args not in __class__.classes:
                 print("** class doesn't exist **")
         else:
             print("** class name missing **")
@@ -44,6 +49,7 @@ class HBNBCommand(cmd.Cmd):
                 if len(argv) == 1:
                     print("** instance id missing **")
                 elif "{}.{}".format(argv[0], argv[1]) not in storage.all():
+                    print(storage.all())
                     print("** no instance found **")
                 else:
                     print(storage.all()["{}.{}".format(argv[0], argv[1])])
@@ -83,9 +89,9 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
             else:
                 for key, value in storage.all().items():
-                    if value.to_dict()['__class__'] == "BaseModel":
+                    if value.to_dict()['__class__'] == argv[0]:
                         model_list.append(str(value))
-                        print(model_list)
+                print(model_list)
 
     def do_update(self, args):
         """update command updates an instance based on the class name and id by adding or updating attribute
