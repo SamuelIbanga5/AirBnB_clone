@@ -13,7 +13,8 @@ from models.review import Review
 
 
 class FileStorage:
-    """FileStorage class that serializes instances to a JSON file and deserializes JSON file to instances."""
+    """FileStorage class that serializes instances to a JSON file
+    and deserializes JSON file to instances."""
     __file_path = "file.json"
     __objects = {}
 
@@ -23,10 +24,12 @@ class FileStorage:
 
     def new(self, obj):
         """new method sets in __objects the obj with key <obj class name>.id"""
-        FileStorage.__objects["{}.{}".format(obj.__class__.__name__, obj.id)] = obj
+        FileStorage.__objects["{}.{}".format(obj.__class__.__name__, obj.id)]\
+            = obj
 
     def save(self):
-        """save method serializes __objects to the JSON file(path: __file_path)"""
+        """save method serializes __objects to the JSON file
+        (path: __file_path)"""
         with open(self.__file_path, 'w') as f:
             obj_dict = {}
             for key, value in self.__objects.items():
@@ -34,8 +37,17 @@ class FileStorage:
             json.dump(obj_dict, f, indent=4)
 
     def reload(self):
-        """reload method deserializes the JSON file to __objects (only if the JSON file (__file_path) exists;"""
-        dct = {"BaseModel": BaseModel, "User": User, "City": City, "Place": Place, "Review": Review, "State": State, "Amenity": Amenity}
+        """reload method deserializes the JSON file to __objects
+        (only if the JSON file (__file_path) exists;"""
+        dct = {
+            "BaseModel": BaseModel,
+            "User": User,
+            "City": City,
+            "Place": Place,
+            "Review": Review,
+            "State": State,
+            "Amenity": Amenity
+        }
 
         try:
             with open(self.__file_path, encoding='utf-8') as f:

@@ -13,6 +13,7 @@ from models.state import State
 from models.engine.file_storage import FileStorage
 from models import storage
 
+
 class HBNBCommand(cmd.Cmd):
     """HBNBCommand defines the command interpreter"""
 
@@ -28,7 +29,9 @@ class HBNBCommand(cmd.Cmd):
     }
 
     def do_create(self, args):
-        """create command creates a new instance of BaseModel, saves it (to the JSON file) and prints the id"""
+        """create command creates a new instance of BaseModel,
+        saves it (to the JSON file) and prints the id
+        """
         if args:
             if args in __class__.classes:
                 model_instance = HBNBCommand.classes[args]()
@@ -40,7 +43,9 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
 
     def do_show(self, args):
-        """show command prints the string representation of an instance based on the class name and id."""
+        """show command prints the string representation
+        of an instance based on the class name and id.
+        """
         argv = args.split(' ')
         if argv[0] == '':
             argv.remove('')
@@ -59,7 +64,9 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
 
     def do_destroy(self, args):
-        """destroy command deletes an instance based on the class name and id."""
+        """destroy command deletes an instance
+        based on the class name and id.
+        """
         argv = args.split(" ")
         if argv[0] == '':
             argv.remove('')
@@ -67,7 +74,8 @@ class HBNBCommand(cmd.Cmd):
             if argv[0] in __class__.classes:
                 if len(argv) == 1:
                     print("** instance id missing **")
-                elif "{}.{}".format(argv[0], argv[1]) not in storage.all().keys():
+                elif "{}.{}".format(argv[0], argv[1])\
+                     not in storage.all().keys():
                     print("** no instance found **")
                 else:
                     del storage.all()["{}.{}".format(argv[0], argv[1])]
@@ -100,17 +108,16 @@ class HBNBCommand(cmd.Cmd):
         argv = args.split(" ")
         if argv[0] == '':
             argv.remove('')
-        
         if len(argv) == 0:
             print("** class name missing **")
-        if argv[0] not in __class__.classes:             
+        if argv[0] not in __class__.classes:
             print("** class doesn't exist **")
         if len(argv) == 1:
             print("** instance id missing **")
         if len(argv) == 2:
             print("** attribute name missing **")
         if "{}.{}".format(argv[0], argv[1]) not in storage.all().keys():
-            print("** no instance found **")               
+            print("** no instance found **")
         if len(argv) == 3:
             try:
                 type(eval(argv[2])) != dict
@@ -122,7 +129,7 @@ class HBNBCommand(cmd.Cmd):
                 value_type = type(obj.__class__.__dict__[argv[2]])
                 obj.__class__.__dict__[argv[2]] = value_type(argv[3])
             else:
-                 obj.__class__.__dict__ = argv[3]
+                obj.__class__.__dict__ = argv[3]
         else:
             obj = storage.all()[f"{argv[0]}.{argv[1]}"]
             for key, value in eval(argv[2]).items():
@@ -132,7 +139,7 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     obj.__dict__[key] = value
         storage.save()
-    
+
     def emptyline(self):
         """override emptyline method when an empty line + ENTER shouldn't execute anything"""
         pass

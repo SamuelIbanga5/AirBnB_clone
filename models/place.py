@@ -4,6 +4,7 @@
 
 from models.base_model import BaseModel
 
+
 class Place(BaseModel):
     """Defines Place class inheriting attributes from BaseModel"""
     city_id = ""
