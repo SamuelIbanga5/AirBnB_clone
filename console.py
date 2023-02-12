@@ -47,6 +47,50 @@ class HBNBCommand(cmd.Cmd):
         "Review": Review
     }
 
+    def default(self, line):
+        """Parse and interpretates a line if not found on regular commands"""
+        count = 0
+        splitline = line.split('.', 1)
+        if len(splitline) >= 2:
+            line = splitline[1].split('(')
+            """ Execute <class name>.all()"""
+            if line[0] == 'all':
+                self.do_all(splitline[0])
+                """Execute <class name>.count() """
+            elif line[0] == 'count':
+                for key in storage.all():
+                    if splitline[0] == key.split(".")[0]:
+                        count += 1
+                print(count)
+                """Execute <class name>.show(<id>) """
+            elif line[0] == 'show':
+                id = line[1].split(')')
+                str_id = str(splitline[0]) + " " + str(id[0])
+                self.do_show(str_id)
+                """Execute <class name>.destroy(<id>)"""
+            elif line[0] == 'destroy':
+                id = line[1].split(')')
+                str_id = str(splitline[0]) + " " + str(id[0])
+                self.do_destroy(str_id)
+                """Execute <class name>.update(<id>"""
+            elif line[0] == 'update':
+                update = line[1].split(')')
+                split = update[0].split('{')
+                if len(split) == 1:
+                    line = update[0].split(",")
+                    str_id = str(splitline[0]) + " " + str(line[0]) + \
+                        " " + str(line[1]) + " " + str(line[2])
+                    self.do_update(str_id)
+                else:
+                    id = split[0][:-2]
+                    str_dict = split[1][:-1]
+                    delim = str_dict.split(',')
+                    for row in delim:
+                        key_value = row.split(':')
+                        str_id = str(splitline[0]) + " " + str(id) + \
+                            " " + str(key_value[0]) + " " + str(key_value[1])
+                        self.do_update(str_id)
+
     def do_create(self, args):
         """create command creates a new instance of BaseModel,
         saves it (to the JSON file) and prints the id
