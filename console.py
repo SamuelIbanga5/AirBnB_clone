@@ -87,7 +87,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
 
     def do_all(self, args):
-        """all command prints all string representation of all instances based or not on the class name."""
+        """all command prints all string representation of all instances
+        based or not on the class name."""
         argv = args.split(" ")
         model_list = []
         if argv[0] == '':
@@ -102,7 +103,8 @@ class HBNBCommand(cmd.Cmd):
                 print(model_list)
 
     def do_update(self, args):
-        """update command updates an instance based on the class name and id by adding or updating attribute
+        """update command updates an instance based on the class name
+        and id by adding or updating attribute
         Usage: update <class name> <id> <attribute name> "<attribute value>"
         """
         argv = args.split(" ")
@@ -133,15 +135,29 @@ class HBNBCommand(cmd.Cmd):
         else:
             obj = storage.all()[f"{argv[0]}.{argv[1]}"]
             for key, value in eval(argv[2]).items():
-                if (key in obj.__class__.__dict__.keys() and type(obj.__class__.__dict__[key]) in {str, int, float}):
+                if key in obj.__class__.__dict__.keys() and\
+                     type(obj.__class__.__dict__[key]) in {str, int, float}:
                     value_type = type(obj.__class__.__dict__[key])
                     obj.__dict__[key] = value_type(value)
                 else:
                     obj.__dict__[key] = value
         storage.save()
 
+    def do_count(self, args):
+        """Usage: count <class> or <class>.count()
+        Retrieve the number of instances of a given class."""
+        argv = args.split(" ")
+        if argv[0] == "":
+            argv.remove("")
+        count = 0
+        for obj in storage.all().values():
+            if argv[0] == obj.__class__.__name__:
+                count += 1
+        print(count)
+
     def emptyline(self):
-        """override emptyline method when an empty line + ENTER shouldn't execute anything"""
+        """override emptyline method when an empty line + ENTER
+        shouldn't execute anything"""
         pass
 
     def do_quit(self, args):
