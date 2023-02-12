@@ -3,6 +3,8 @@
 
 
 import cmd
+import re
+from shlex import split
 from models.base_model import BaseModel
 from models.user import User
 from models.amenity import Amenity
@@ -13,6 +15,23 @@ from models.state import State
 from models.engine.file_storage import FileStorage
 from models import storage
 
+
+def parse(arg):
+    curly_braces = re.search(r"\{(.*?)\}", arg)
+    brackets = re.search(r"\[(.*?)\]", arg)
+    if curly_braces is None:
+        if brackets is None:
+            return [i.strip(",") for i in split(arg)]
+        else:
+            lexer = split(arg[:brackets.span()[0]])
+            retl = [i.strip(",") for i in lexer]
+            retl.append(brackets.group())
+            return retl
+    else:
+        lexer = split(arg[:curly_braces.span()[0]])
+        retl = [i.strip(",") for i in lexer]
+        retl.append(curly_braces.group())
+        return retl
 
 class HBNBCommand(cmd.Cmd):
     """HBNBCommand defines the command interpreter"""
@@ -102,57 +121,63 @@ class HBNBCommand(cmd.Cmd):
                         model_list.append(str(value))
                 print(model_list)
 
-    def do_update(self, args):
-        """update command updates an instance based on the class name
-        and id by adding or updating attribute
-        Usage: update <class name> <id> <attribute name> "<attribute value>"
-        """
-        argv = args.split(" ")
-        if argv[0] == '':
-            argv.remove('')
-        if len(argv) == 0:
+    def do_update(self, arg):
+        """Usage: update <class> <id> <attribute_name> <attribute_value> or
+       <class>.update(<id>, <attribute_name>, <attribute_value>) or
+       <class>.update(<id>, <dictionary>)
+        Update a class instance of a given id by adding or updating
+        a given attribute key/value pair or dictionary."""
+        argl = parse(arg)
+        objdict = storage.all()
+
+        if len(argl) == 0:
             print("** class name missing **")
-        if argv[0] not in __class__.classes:
+            return False
+        if argl[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
-        if len(argv) == 1:
+            return False
+        if len(argl) == 1:
             print("** instance id missing **")
-        if len(argv) == 2:
-            print("** attribute name missing **")
-        if "{}.{}".format(argv[0], argv[1]) not in storage.all().keys():
+            return False
+        if "{}.{}".format(argl[0], argl[1]) not in objdict.keys():
             print("** no instance found **")
-        if len(argv) == 3:
+            return False
+        if len(argl) == 2:
+            print("** attribute name missing **")
+            return False
+        if len(argl) == 3:
             try:
-                type(eval(argv[2])) != dict
+                type(eval(argl[2])) != dict
             except NameError:
                 print("** value missing **")
-        if len(argv) == 4:
-            obj = storage.all()[f"{argv[0]}.{argv[1]}"]
-            if argv[2] in obj.__class__.__dict__.keys():
-                value_type = type(obj.__class__.__dict__[argv[2]])
-                obj.__class__.__dict__[argv[2]] = value_type(argv[3])
+                return False
+
+        if len(argl) == 4:
+            obj = objdict["{}.{}".format(argl[0], argl[1])]
+            if argl[2] in obj.__class__.__dict__.keys():
+                valtype = type(obj.__class__.__dict__[argl[2]])
+                obj.__dict__[argl[2]] = valtype(argl[3])
             else:
-                obj.__class__.__dict__ = argv[3]
-        else:
-            obj = storage.all()[f"{argv[0]}.{argv[1]}"]
-            for key, value in eval(argv[2]).items():
-                if key in obj.__class__.__dict__.keys() and\
-                     type(obj.__class__.__dict__[key]) in {str, int, float}:
-                    value_type = type(obj.__class__.__dict__[key])
-                    obj.__dict__[key] = value_type(value)
+                obj.__dict__[argl[2]] = argl[3]
+        elif type(eval(argl[2])) == dict:
+            obj = objdict["{}.{}".format(argl[0], argl[1])]
+            for k, v in eval(argl[2]).items():
+                if (k in obj.__class__.__dict__.keys() and
+                        type(obj.__class__.__dict__[k]) in {str, int, float}):
+                    valtype = type(obj.__class__.__dict__[k])
+                    obj.__dict__[k] = valtype(v)
                 else:
-                    obj.__dict__[key] = value
+                    obj.__dict__[k] = v
         storage.save()
 
-    def do_count(self, args):
-        """Usage: count <class> or <class>.count()
-        Retrieve the number of instances of a given class."""
-        argv = args.split(" ")
-        if argv[0] == "":
-            argv.remove("")
+    def do_count(self, cls_name):
+        """counts number of instances of a class"""
         count = 0
-        for obj in storage.all().values():
-            if argv[0] == obj.__class__.__name__:
-                count += 1
+        all_objs = storage.all()
+        for k, v in all_objs.items():
+            clss = k.split('.')
+            if clss[0] == cls_name:
+                count = count + 1
         print(count)
 
     def emptyline(self):
