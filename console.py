@@ -230,11 +230,11 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_quit(self, args):
-        """Quit command to exit the program: quit"""
+        """Quit command to exit the program."""
         return True
 
     def do_EOF(self, args):
-        """EOF command to exit program: EOF"""
+        """EOF signal to exit program."""
         print()
         return True
 
