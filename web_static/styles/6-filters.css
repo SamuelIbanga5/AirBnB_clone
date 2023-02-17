@@ -83,7 +83,6 @@ li{
 }
 
 .popover li h2{
-    /* margin-top: 15px; */
     font-size: 16px;
 }
 
@@ -91,3 +90,10 @@ li{
     margin-left: 20px;
 }
 
+.locations:hover .popover{
+    display: block;
+}
+
+.amenities:hover .popover{
+    display: block;
+}
