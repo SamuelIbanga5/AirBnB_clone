@@ -39,6 +39,7 @@
     position: relative;
     top: 50%;
     transform: translateY(-50%);
+    /* padding: 17px 45px; */
 }
 
 .locations{
@@ -59,3 +60,34 @@
 .texts{
     margin: 17px 45px;
 }
+
+.amenities .popover{
+    padding: 25px 45px 25px;
+}
+.popover{
+    background-color: #FAFAFA;
+    width: 100%;
+    display: none;
+    border: #DDDDDD 1px solid;
+    border-radius: 4px;
+    padding: 25px 25px 25px;
+}
+
+li{
+    list-style-type: none;
+    line-height: 1.5em;
+}
+
+.popover > li:nth-of-type(2) h2{
+    margin-top: 18px;
+}
+
+.popover li h2{
+    /* margin-top: 15px; */
+    font-size: 16px;
+}
+
+.popover li ul li{
+    margin-left: 20px;
+}
+
