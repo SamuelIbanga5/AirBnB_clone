@@ -1,0 +1,29 @@
+.places{
+    position: relative;
+    /* text-align: center; */
+}
+
+.places h1{
+    /* position: absolute; */
+    /* top: 20px; */
+    /* left: 10px; */
+    font-size: 30px;
+    /* margin: 20px 10px; */
+}
+
+.places article{
+    /* position: relative; */
+    /* top: 30px; */
+    width: 390px;
+    padding: 20px;
+    margin: 20px;
+    border: #FF5A5F 1px solid;
+    border-radius: 4px;
+    display: inline-block;
+    
+}
+
+.places article h2{
+    font-size: 30px;
+    text-align: center;
+}
