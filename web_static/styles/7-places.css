@@ -4,18 +4,12 @@
 }
 
 .places h1{
-    /* position: absolute; */
-    /* top: 20px; */
-    /* left: 10px; */
     font-size: 30px;
-    /* float: left; */
     text-align: start;
     margin: 20px 10px 0;
 }
 
 .places article{
-    /* position: relative; */
-    /* top: 30px; */
     width: 390px;
     padding: 20px;
     margin: 20px;
