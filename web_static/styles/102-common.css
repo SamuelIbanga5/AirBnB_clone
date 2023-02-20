@@ -1,0 +1,27 @@
+body{
+    padding: 0;
+    margin: 0;
+    color: #484848;
+    font-size: 14px;
+    font-family: Circular, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.container{
+    max-width: 1000px;
+    margin: 30px auto;
+    padding-bottom: 30px;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px){
+    .container{
+        width: 95%;
+        overflow: hidden;
+    }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px){
+    .container{
+        width: 95%;
+        overflow: hidden;
+    }
+}
